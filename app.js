@@ -76,11 +76,17 @@ var ctx = canvas.getContext('2d');
 
 // Draw the noise values
 var octaves = 8;
-var waterLevel = -0.1;
+var waterLevel = 0.3;
 var seed = Math.random() * 200;
+var width = 500;
+var halfWidth = width / 2;
+var height = 500;
+var halfHeight = height / 2;
 
-for (var x = 0; x < 500; x++) {
-  for (var y = 0; y < 500; y++) {
+var maxDistance = 0.8 * Math.sqrt(halfWidth * halfWidth + halfHeight * halfHeight);
+
+for (var x = 0; x < width; x++) {
+  for (var y = 0; y < height; y++) {
 
     var value = 0;
     for (var o = 1 << octaves; o >= 1; o >>= 1) {
@@ -90,10 +96,21 @@ for (var x = 0; x < 500; x++) {
     // Get the average value
     value /= (2 << octaves);
 
-    var component = Math.floor(127.5 + value * (127.5));
+    // Normalize to [0, 1]
+    value = (value + 1) / 2;
+
+    // Ensure an island/circular shape.
+    var xDist = x - halfWidth;
+    var yDist = y - halfHeight;
+    var dist = Math.sqrt(xDist * xDist + yDist * yDist);
+    
+    value *= Math.max(0, 1 - Math.pow(dist / maxDistance, 2));
+
+
+    var component = Math.floor(value * 255);
 
     if (value < waterLevel) {
-      ctx.fillStyle = 'rgb(0, 0, ' + component + ')'
+      ctx.fillStyle = 'rgb(0, 0, ' + (30 + component) + ')'
     } else {
       ctx.fillStyle = 'rgb(' + component + ',' + component + ',' + component + ')';
     }
