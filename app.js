@@ -77,14 +77,14 @@ var ctx = canvas.getContext('2d');
 // Draw the noise values
 var octaves = 8;
 var waterLevel = -0.1;
-var offset = Math.random() * 100;
+var seed = Math.random() * 200;
 
 for (var x = 0; x < 500; x++) {
   for (var y = 0; y < 500; y++) {
 
     var value = 0;
     for (var o = 1 << octaves; o >= 1; o >>= 1) {
-      value += noise((x + offset) / o, (y + offset) / o, 1) * o;
+      value += noise((x + seed) / o, (y + seed) / o, seed) * o;
     }
 
     // Get the average value
