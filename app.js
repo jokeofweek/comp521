@@ -73,16 +73,30 @@ var noise = function(x, y, z) {
 var canvas = document.getElementById('c');
 var ctx = canvas.getContext('2d');
 
-// Draw the noise values
-var detail = 2;
 
-var offset = Math.random();
-var modifier = 500 / detail;
+// Draw the noise values
+var octaves = 8;
+var waterLevel = -0.1;
+var offset = Math.random() * 100;
+
 for (var x = 0; x < 500; x++) {
   for (var y = 0; y < 500; y++) {
-    var n = noise(offset * x / modifier, offset * y / modifier, offset );
-    var component = Math.floor(127.5 + n * (127.5));
-    ctx.fillStyle = 'rgb(' + component + ',' + component + ',' + component + ')';
+
+    var value = 0;
+    for (var o = 1 << octaves; o >= 1; o >>= 1) {
+      value += noise((x + offset) / o, (y + offset) / o, 1) * o;
+    }
+
+    // Get the average value
+    value /= (2 << octaves);
+
+    var component = Math.floor(127.5 + value * (127.5));
+
+    if (value < waterLevel) {
+      ctx.fillStyle = 'rgb(0, 0, ' + component + ')'
+    } else {
+      ctx.fillStyle = 'rgb(' + component + ',' + component + ',' + component + ')';
+    }
     ctx.fillRect(x, y, 1, 1);
   }
 }
