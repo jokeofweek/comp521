@@ -75,17 +75,17 @@ var noise = function(x, y, z) {
 
 
 // Draw the noise values
-var octaves = 8;
+var octaves = 7;
 var waterLevel = 0.3;
 var seed = Math.random() * 200;
-var width = 300;
+var width = 500;
 var halfWidth = width / 2;
-var height = 300;
+var height = 500;
 var halfHeight = height / 2;
 
 var maxDistance = 0.8 * Math.sqrt(halfWidth * halfWidth + halfHeight * halfHeight);
 
-var data = new Uint16Array(width * height);
+var data = new Float32Array(width * height);
 
 for (var y = 0; y < height; y++) {
   for (var x = 0; x < width; x++) {
@@ -131,7 +131,7 @@ camera.position.set(0, -50, 50);
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-var geometry = new THREE.PlaneGeometry(60, 60, width - 1, height - 1);
+var geometry = new THREE.PlaneGeometry(100, 100, width - 1, height - 1);
 
 for (var i = 0, l = geometry.vertices.length; i < l; i++) {
     geometry.vertices[i].z = data[i];
