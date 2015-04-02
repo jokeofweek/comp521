@@ -70,24 +70,25 @@ var noise = function(x, y, z) {
                                  grad(p[BB+1], x-1, y-1, z-1 ))));
 };
 
-var canvas = document.getElementById('c');
-var ctx = canvas.getContext('2d');
+// var canvas = document.getElementById('c');
+// var ctx = canvas.getContext('2d');
 
 
 // Draw the noise values
 var octaves = 8;
 var waterLevel = 0.3;
 var seed = Math.random() * 200;
-var width = 500;
+var width = 300;
 var halfWidth = width / 2;
-var height = 500;
+var height = 300;
 var halfHeight = height / 2;
 
 var maxDistance = 0.8 * Math.sqrt(halfWidth * halfWidth + halfHeight * halfHeight);
 
-for (var x = 0; x < width; x++) {
-  for (var y = 0; y < height; y++) {
+var data = new Uint16Array(width * height);
 
+for (var y = 0; y < height; y++) {
+  for (var x = 0; x < width; x++) {
     var value = 0;
     for (var o = 1 << octaves; o >= 1; o >>= 1) {
       value += noise((x + seed) / o, (y + seed) / o, seed) * o;
@@ -106,14 +107,53 @@ for (var x = 0; x < width; x++) {
     
     value *= Math.max(0, 1 - Math.pow(dist / maxDistance, 2));
 
+    data[y * width + x] = value * 20;
+    // var component = Math.floor(value * 255);
 
-    var component = Math.floor(value * 255);
-
-    if (value < waterLevel) {
-      ctx.fillStyle = 'rgb(0, 0, ' + (30 + component) + ')'
-    } else {
-      ctx.fillStyle = 'rgb(' + component + ',' + component + ',' + component + ')';
-    }
-    ctx.fillRect(x, y, 1, 1);
+    // if (value < waterLevel) {
+    //   ctx.fillStyle = 'rgb(0, 0, ' + (30 + component) + ')'
+    // } else {
+    //   ctx.fillStyle = 'rgb(' + component + ',' + component + ',' + component + ')';
+    // }
+    // ctx.fillRect(x, y, 1, 1);
   }
+}
+
+
+var scene = new THREE.Scene();
+
+var axes = new THREE.AxisHelper(200);
+scene.add(axes);
+
+var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, -50, 50);
+
+var renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+var geometry = new THREE.PlaneGeometry(60, 60, width - 1, height - 1);
+
+for (var i = 0, l = geometry.vertices.length; i < l; i++) {
+    geometry.vertices[i].z = data[i];
+}
+
+var material = new THREE.MeshPhongMaterial({
+    color: 0xdddddd, 
+    wireframe: true
+});
+
+var plane = new THREE.Mesh(geometry, material);
+scene.add(plane);
+
+
+var controls = new THREE.TrackballControls(camera); 
+
+document.getElementById('webgl').appendChild(renderer.domElement);
+
+render();
+
+function render() {
+    controls.update();    
+    requestAnimationFrame(render);
+    renderer.render(scene, camera);
 }
