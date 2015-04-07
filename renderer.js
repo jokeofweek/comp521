@@ -19,7 +19,7 @@ Renderer.prototype.render = function(map) {
           rgb  = [0,0,0];
 
       if (v < this.waterLevel) {
-        rgb[2] = Math.min(v+50, 255);
+        rgb[2] = v + 180;
       } else {
         rgb[0] = v/2;
         rgb[1] = v;
