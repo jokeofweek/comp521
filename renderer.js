@@ -10,21 +10,28 @@ function Renderer(canvas, size, waterLevel) {
 }
 
 Renderer.prototype.render = function(map) {
+  var image = this.ctx.createImageData(this.size, this.size);
+
   for (var x = 0; x < this.size; x++) {
     for (var y = 0; y < this.size; y++) {
-      var v   = map.get(x, y);
-          rgb = [0,0,0];
+      var i    = 4 * (y * this.size + x),
+          v    = map.get(x, y),
+          rgb  = [0,0,0];
 
       if (v < this.waterLevel) {
-        var b = Math.min(v+50, 255);
-        rgb = [0,0,b];
+        rgb[2] = Math.min(v+50, 255);
       } else {
-        var r = b = v/2;
-        rgb = [r,v,b];
+        rgb[0] = v/2;
+        rgb[1] = v;
+        rgb[2] = v/2;
       }
 
-      this.ctx.fillStyle = 'rgb(' + rgb.join() + ')';
-      this.ctx.fillRect(x, y, 1, 1);
+      image.data[i]     = rgb[0];
+      image.data[i + 1] = rgb[1];
+      image.data[i + 2] = rgb[2];
+      image.data[i + 3] = 255;
     }
   }
+
+  this.ctx.putImageData(image, 0, 0);
 }
