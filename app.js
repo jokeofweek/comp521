@@ -70,9 +70,6 @@ var noise = function(x, y, z) {
                                  grad(p[BB+1], x-1, y-1, z-1 ))));
 };
 
-var canvas = document.getElementById('c');
-var ctx = canvas.getContext('2d');
-
 
 // Draw the noise values
 var octaves = 7;
@@ -82,6 +79,12 @@ var width = 500;
 var halfWidth = width / 2;
 var height = 500;
 var halfHeight = height / 2;
+
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+
+canvas.height = height;
+canvas.width = width;
 
 var maxDistance = 0.8 * Math.sqrt(halfWidth * halfWidth + halfHeight * halfHeight);
 
