@@ -40,4 +40,7 @@ for (var x = 0; x < size; x++) {
   }
 }
 
+var eroder = new Eroder(5, 5);
+eroder.erode(heightmap);
+
 renderer.render(heightmap);
