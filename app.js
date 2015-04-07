@@ -19,7 +19,7 @@ for (var y = 0; y < height; y++) {
   for (var x = 0; x < width; x++) {
     var value = 0;
     for (var o = 1 << octaves; o >= 1; o >>= 1) {
-      value += noise.perlin3((x + seed) / o, (y + seed) / o, seed) * o;
+      value += noise.perlin2((x + seed) / o, (y + seed) / o) * o;
     }
 
     // Get the average value
