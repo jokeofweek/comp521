@@ -9,10 +9,10 @@ function Renderer(canvas, size, waterLevel) {
   this.canvas.width  = size;
 }
 
-Renderer.prototype.render = function(heightmap) {
+Renderer.prototype.render = function(map) {
   for (var x = 0; x < this.size; x++) {
     for (var y = 0; y < this.size; y++) {
-      var v   = heightmap[y * this.size + x],
+      var v   = map.get(x, y);
           rgb = [0,0,0];
 
       if (v < this.waterLevel) {

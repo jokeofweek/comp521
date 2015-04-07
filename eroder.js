@@ -18,11 +18,13 @@ Eroder.prototype.erode = function(map) {
         var maxDiff = 0;
         var maxNeighbor;
 
-        var h = map[x + y * size];
+        var h = map.get(x, y);
 
         // Find the neighbor with the smallest difference
         for (var n = 0; n < neighbors.length; n++) {
-          var other = map[x + neighbors[n][0] + (y + neighbors[n][1]) * size];
+          var i = x + neighbors[n][0],
+              j = y + neighbors[n][1];
+          var other = map.get(i, j);
           var diff = h - other;
           if (diff > maxDiff) {
             maxDiff = diff;
@@ -34,8 +36,11 @@ Eroder.prototype.erode = function(map) {
         // sediment to make up for the height difference.
         if (0 < maxDiff && maxDiff <= this.threshold) {
           var change = Math.round(maxDiff / 2);
-          map[x + y * size] -= change;
-          map[x + neighbors[maxNeighbor][0] + (y + neighbors[maxNeighbor][1]) * size] += change;
+          map.set(x, y, map.get(x, y) - change);
+
+          var i = x + neighbors[maxNeighbor][0],
+              j = y + neighbors[maxNeighbor][1];
+          map.set(i, j, map.get(i, j) + change);
         }
       }
     }
