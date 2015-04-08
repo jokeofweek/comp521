@@ -3,7 +3,9 @@ var octaves = 7;
 var size = 500;
 
 // Seed the RNG
-noise.seed(Math.random());
+var seed = Math.round(1000 * Math.random());
+noise.seed(seed);
+console.log('seed: ' + seed);
 
 var map      = new Map(size);
 var eroder   = new Eroder(5, 5);
