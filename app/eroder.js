@@ -36,7 +36,7 @@ Eroder.prototype.erode = function(map) {
         // sediment to make up for the height difference.
         if (0 < maxDiff && maxDiff <= this.threshold) {
           var change = Math.round(maxDiff / 2);
-          map.set(x, y, map.get(x, y) - change);
+          map.set(x, y, h - change);
 
           var i = x + neighbors[maxNeighbor][0],
               j = y + neighbors[maxNeighbor][1];
