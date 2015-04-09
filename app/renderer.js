@@ -4,7 +4,6 @@ function Renderer(canvas, size, options) {
   this.size   = size;
 
   options = options || {};
-  this.waterLevel = options['waterLevel'] || 75;
   this.treeLevel  = options['treeLevel'] || 100;
 
   this.canvas.height = size;
@@ -20,7 +19,7 @@ Renderer.prototype.render = function(map) {
           z    = map.get(x, y),
           rgb  = [0,0,0];
 
-      if (z < this.waterLevel) {
+      if (z < map.getWaterLevel()) {
         rgb[2] = z + 180;
       } else {
         if (z > this.treeLevel && noise.simplex2(x, y) > 0.95) {

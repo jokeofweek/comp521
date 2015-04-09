@@ -5,6 +5,9 @@ function Map(size) {
 
   this.range       = 0.8;
   this.maxDistance = this.range * Math.sqrt(this.size * this.size / 2);
+
+  this.waterLevelThreshold = 0.3;
+  this.waterLevel = null;
 }
 
 Map.prototype.set = function(x, y, z) {
@@ -28,7 +31,19 @@ Map.prototype.generate = function(octaves) {
       this.heightmap[y * this.size + x] = 255 * value;
     }
   }
+
+  // Determine the water level
+  var low = 255, high = 0;
+  for (var i = 0; i < this.heightmap.length; i++) {
+    low = Math.min(low, this.heightmap[i]);
+    high = Math.max(high, this.heightmap[i]);
+  }
+  this.waterLevel = low + Math.round((high - low) * this.waterLevelThreshold);
 }
+
+Map.prototype.getWaterLevel = function() {
+  return this.waterLevel;  
+};
 
 // Perlin noise at a point with N octaves from
 // https://github.com/Hypercubed/perlin-terrain-angular-demo/blob/bd6df90b055a555194dd4aa09cbe9776de2de7f0/script.js#L38-L51

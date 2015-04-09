@@ -1,9 +1,6 @@
 function Renderer3(canvas, size, options) {
   this.canvas = canvas;
   this.size   = size;
-
-  options = options || {};
-  this.waterLevel = options['waterLevel'] || 75;
 }
 
 Renderer3.prototype.render = function(map) {
@@ -35,13 +32,13 @@ Renderer3.prototype.render = function(map) {
   plane.rotation.x = -Math.PI / 2.0;
   scene.add(plane);
 
-  var water = new THREE.Mesh(new THREE.BoxGeometry(100, 50 * this.waterLevel / 255, 100),
+  var water = new THREE.Mesh(new THREE.BoxGeometry(100, 50 * map.getWaterLevel() / 255, 100),
               new THREE.MeshBasicMaterial({
                 color: 0x3366aa,
                 transparent: true,
                 opacity: 0.7
               }));
-  water.position.y += 25 * this.waterLevel / 255
+  water.position.y += 25 * map.getWaterLevel() / 255
   scene.add(water);
 
   scene.add(new THREE.AmbientLight(0xcccccc));
