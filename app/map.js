@@ -12,7 +12,11 @@ Map.prototype.set = function(x, y, z) {
 }
 
 Map.prototype.get = function(x, y) {
-  return this.heightmap[y * this.size + x];
+  if (y === undefined) {
+    return this.heightmap[x];
+  } else {
+    return this.heightmap[y * this.size + x];
+  }
 }
 
 Map.prototype.generate = function(octaves) {
