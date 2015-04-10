@@ -28,7 +28,7 @@ Map.prototype.generate = function(octaves) {
       value = noiseWithOctaves(x/this.size, y/this.size, octaves);
       value = keepInCircle(value, this.size, this.maxDistance, x, y);
 
-      this.heightmap[y * this.size + x] = 255 * value;
+      this.heightmap[y * this.size + x] = 200 * value;
     }
   }
 

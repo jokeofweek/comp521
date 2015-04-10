@@ -8,7 +8,7 @@ noise.seed(seed);
 console.log('seed: ' + seed);
 
 var map      = new Map(size);
-var eroder   = new Eroder(5, 5);
+var eroder   = new Eroder(10, 2);
 var renderer = new Renderer3(document.getElementById('canvas'), size);
 
 map.generate(octaves);

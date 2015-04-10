@@ -22,9 +22,9 @@ Eroder.prototype.erode = function(map) {
 
         // Find the neighbor with the smallest difference
         for (var n = 0; n < neighbors.length; n++) {
-          var i = x + neighbors[n][0],
-              j = y + neighbors[n][1];
-          var other = map.get(i, j);
+          var x1 = x + neighbors[n][0],
+              y1 = y + neighbors[n][1];
+          var other = map.get(x1, y1);
           var diff = h - other;
           if (diff > maxDiff) {
             maxDiff = diff;
@@ -38,9 +38,9 @@ Eroder.prototype.erode = function(map) {
           var change = Math.round(maxDiff / 2);
           map.set(x, y, h - change);
 
-          var i = x + neighbors[maxNeighbor][0],
-              j = y + neighbors[maxNeighbor][1];
-          map.set(i, j, map.get(i, j) + change);
+          var x1 = x + neighbors[maxNeighbor][0],
+              y1 = y + neighbors[maxNeighbor][1];
+          map.set(x1, y1, map.get(x1, y1) + change);
         }
       }
     }
