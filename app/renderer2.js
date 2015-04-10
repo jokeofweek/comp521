@@ -1,16 +1,15 @@
-function Renderer(canvas, size, options) {
+function Renderer2(canvas, size, options) {
   this.canvas = canvas;
   this.ctx    = canvas.getContext('2d');
   this.size   = size;
 
   options = options || {};
-  this.treeLevel  = options['treeLevel'] || 100;
 
   this.canvas.height = size;
   this.canvas.width  = size;
 }
 
-Renderer.prototype.render = function(map) {
+Renderer2.prototype.render = function(map) {
   var image = this.ctx.createImageData(this.size, this.size);
 
   for (var x = 0; x < this.size; x++) {
@@ -22,15 +21,9 @@ Renderer.prototype.render = function(map) {
       if (z < map.getWaterLevel()) {
         rgb[2] = z + 180;
       } else {
-        if (z > this.treeLevel && noise.simplex2(x, y) > 0.95) {
-          rgb[0] = 80;
-          rgb[1] = 40;
-          rgb[2] = 10;
-        } else {
-          rgb[0] = z/2;
-          rgb[1] = z;
-          rgb[2] = z/2;
-        }
+        rgb[0] = z/2;
+        rgb[1] = z;
+        rgb[2] = z/2;
       }
 
       image.data[i]     = rgb[0];

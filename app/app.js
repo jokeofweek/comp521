@@ -7,10 +7,15 @@ var seed = Math.round(1000 * Math.random());
 noise.seed(seed);
 console.log('seed: ' + seed);
 
-var map      = new Map(size);
-var eroder   = new Eroder(10, 2);
-var renderer = new Renderer3(document.getElementById('canvas'), size);
+var map        = new Map(size);
+var eroder     = new Eroder(10, 2);
+var renderer3d = new Renderer3(document.getElementById('canvas3d'), size);
+var renderer2d = new Renderer2(document.getElementById('canvas2d'), size);
 
+// Generate map
 map.generate(octaves);
 eroder.erode(map);
-renderer.render(map);
+
+// Render
+renderer3d.render(map);
+renderer2d.render(map);
