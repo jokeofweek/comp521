@@ -11,6 +11,7 @@ var map        = new Map(size);
 var eroder     = new Eroder(10, 2);
 var renderer3d = new Renderer3(document.getElementById('canvas3d'), size);
 var renderer2d = new Renderer2(document.getElementById('canvas2d'), size);
+var resourceRenderer = new ResourceRenderer(document.getElementById('canvasres'), size);
 
 // Generate map
 map.generate(octaves);
@@ -19,3 +20,4 @@ eroder.erode(map);
 // Render
 renderer3d.render(map);
 renderer2d.render(map);
+resourceRenderer.render(map);

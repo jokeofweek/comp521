@@ -1,7 +1,8 @@
 function Map(size) {
   this.size = size;
 
-  this.heightmap  = new Uint8ClampedArray(size*size);
+  this.heightMap  = new Uint8ClampedArray(size*size);
+  this.resourceMap = new Uint8ClampedArray(size * size);
 
   this.range       = 0.8;
   this.maxDistance = this.range * Math.sqrt(this.size * this.size / 2);
@@ -11,14 +12,22 @@ function Map(size) {
 }
 
 Map.prototype.set = function(x, y, z) {
-  this.heightmap[y * this.size + x] = z;
+  this.heightMap[y * this.size + x] = z;
 }
 
 Map.prototype.get = function(x, y) {
   if (y === undefined) {
-    return this.heightmap[x];
+    return this.heightMap[x];
   } else {
-    return this.heightmap[y * this.size + x];
+    return this.heightMap[y * this.size + x];
+  }
+}
+
+Map.prototype.getResource = function(x, y) {
+  if (y === undefined) {
+    return this.resourceMap[x];
+  } else {
+    return this.resourceMap[y * this.size + x];
   }
 }
 
@@ -28,17 +37,29 @@ Map.prototype.generate = function(octaves) {
       value = noiseWithOctaves(x/this.size, y/this.size, octaves);
       value = keepInCircle(value, this.size, this.maxDistance, x, y);
 
-      this.heightmap[y * this.size + x] = 200 * value;
+      this.heightMap[y * this.size + x] = 200 * value;
     }
   }
 
   // Determine the water level
   var low = 255, high = 0;
-  for (var i = 0; i < this.heightmap.length; i++) {
-    low = Math.min(low, this.heightmap[i]);
-    high = Math.max(high, this.heightmap[i]);
+  for (var i = 0; i < this.heightMap.length; i++) {
+    low = Math.min(low, this.heightMap[i]);
+    high = Math.max(high, this.heightMap[i]);
   }
   this.waterLevel = low + Math.round((high - low) * this.waterLevelThreshold);
+
+  // Create the resource map
+  noise.seed(seed * 2);
+  for (var x = 0; x < this.size; x++) {
+    for (var y = 0; y < this.size; y++) {
+      value = noiseWithOctaves(x/this.size, y/this.size, octaves);
+
+      this.resourceMap[y * this.size + x] = 255 * value;
+    }
+  }
+
+  noise.seed(seed);
 }
 
 Map.prototype.getWaterLevel = function() {
