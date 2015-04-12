@@ -6,20 +6,23 @@ function Smoother() {
 };
 
 Smoother.prototype.smooth = function(map) {
-  // Fro each point, average the points height with all of its negihbors.
+  // For each point, average the points height with all of its negihbors.
   for (var x = 1; x < size - 1; x++) {
     for (var y = 1; y < size - 1; y++) {
-      var total = 0;
-      var iters = 0;
-      for (var i = -1; i < 2; i++) {
-        for (var j = -1; j < 2; j++) {
-          total += map.get(x + i + (y + j) * size);
-          iters++;
+      var delta  = [-1, 0, 1],
+          values = [],
+          total  = 0;
+
+      for (var i = 0; i < delta.length; i++) {
+        for (var j = 0; j < delta.length; j++) {
+          var value = map.get(x+i, y+j);
+          total += value;
+          values.push(value);
         }
       }
-      map.set(x + y * size, total / 9);
-      // console.log(map.get(x + y * size)); 
-      console.log(iters);
+
+      var average = total / 9.0;
+      map.set(x, y, average);
     }
   }
 };
