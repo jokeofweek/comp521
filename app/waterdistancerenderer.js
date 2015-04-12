@@ -1,4 +1,4 @@
-function Renderer2(canvas, size, options) {
+function WaterDistanceRenderer(canvas, size, options) {
   this.canvas = canvas;
   this.ctx    = canvas.getContext('2d');
   this.size   = size / 2;
@@ -9,26 +9,16 @@ function Renderer2(canvas, size, options) {
   this.canvas.width  = size / 2;
 }
 
-Renderer2.prototype.render = function(map) {
+WaterDistanceRenderer.prototype.render = function(map) {
   var image = this.ctx.createImageData(this.size, this.size);
 
   for (var x = 0; x < this.size; x++) {
     for (var y = 0; y < this.size; y++) {
       var i    = 4 * (y * this.size + x),
-          z    = map.get(x * 2, y * 2),
-          rgb  = [0,0,0];
-
-      if (z < map.getWaterLevel()) {
-        rgb[2] = z + 180;
-      } else {
-        rgb[0] = z/2;
-        rgb[1] = z;
-        rgb[2] = z/2;
-      }
-
-      image.data[i]     = rgb[0];
-      image.data[i + 1] = rgb[1];
-      image.data[i + 2] = rgb[2];
+          v    = map.getWaterDistance(x * 2, y * 2);
+      image.data[i]     = v;
+      image.data[i + 1] = v;
+      image.data[i + 2] = v;
       image.data[i + 3] = 255;
     }
   }

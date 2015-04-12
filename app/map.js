@@ -3,6 +3,7 @@ function Map(size) {
 
   this.heightMap  = new Uint8ClampedArray(size*size);
   this.resourceMap = new Uint8ClampedArray(size * size);
+  this.waterDistanceMap = new Uint8ClampedArray(size * size);
 
   this.range       = 0.8;
   this.maxDistance = this.range * Math.sqrt(this.size * this.size / 2);
@@ -30,6 +31,14 @@ Map.prototype.getResource = function(x, y) {
     return this.resourceMap[y * this.size + x];
   }
 }
+
+Map.prototype.getWaterDistance = function(x, y) {
+  if (y === undefined) {
+    return this.waterDistanceMap[x];
+  } else {
+    return this.waterDistanceMap[y * this.size + x];
+  }
+};
 
 Map.prototype.generate = function(octaves) {
   for (var x = 0; x < this.size; x++) {
@@ -60,7 +69,83 @@ Map.prototype.generate = function(octaves) {
   }
 
   noise.seed(seed);
+
+  this.setupWaterDistanceMap();
 }
+
+
+Map.prototype.setupWaterDistanceMap = function() {
+  var chunksAcross = 25;
+  var chunkSize = size / chunksAcross;
+
+  var chunkMap = new Uint8ClampedArray(chunksAcross * chunksAcross);
+
+  // Separate the map into more coarse-grained chunks in order to
+  // speed up determining how close a cell is to water.
+  for (var cX = 0; cX < chunksAcross; cX++) {
+    for (var cY = 0; cY < chunksAcross; cY++) {
+      var hasWater = false;
+      var xOffset = cX * chunkSize;
+      var yOffset = cY * chunkSize * size;
+
+      for (var x = 0; x < chunkSize && !hasWater; x++) {
+        for (var y = 0; y < chunkSize; y++) {
+          if (this.heightMap[xOffset + yOffset + x + y * size] <= this.waterLevel) {
+            hasWater = true;
+            break;
+          }
+        }
+      }
+
+      chunkMap[cX + cY * chunksAcross] = hasWater ? 0 : 1;
+    }
+  }
+
+  // Perform a BFS on the chunks to figure out the distance for each chunk.
+  var offsets = [-1, 1, -chunksAcross, chunksAcross];
+
+  for (var cX = 1; cX < chunksAcross - 1; cX++) {
+    for (var cY = 1; cY < chunksAcross - 1; cY++) {
+      // If the point has water, exit early
+      if (chunkMap[cY * chunksAcross + cX] == 0) {
+        continue;
+      }
+
+      // Use BFS to determine the water closest to a point,
+      // based on Manhattan distance.
+      var neighbors = [[0, cY * chunksAcross + cX]];
+      var visited = {};
+      while (neighbors.length > 0) {
+        // Expand the neighbor until we find water
+        var neighbor = neighbors.shift();
+        if (chunkMap[neighbor[1]] == 0) {
+          var xOffset = cX * chunkSize;
+          var yOffset = cY * chunkSize * size;
+          for (var x = 0; x < chunkSize; x++) {
+            for (var y = 0; y < chunkSize; y++) {
+              this.waterDistanceMap[xOffset + yOffset + x + y * size] = neighbor[0] * 20;
+            }
+          }
+          break;
+        }
+
+        // If we've already visited, ignore.
+        if (visited[neighbor[1]]) continue;
+
+        // Add any unvisited neighbors
+        for (var o = 0; o < offsets.length; o++) {
+          if (neighbor[1] + offsets[0] < 0 || neighbor[1] + offsets[0] >= chunkMap.length) continue;
+          if (!visited[neighbor[1] + offsets[o]]) neighbors.push([neighbor[0] + 1, neighbor[1] + offsets[o]]);
+        }
+
+        // Mark it as visited
+        visited[neighbor[1]] = true;
+      }
+
+    }
+  }
+};
+
 
 Map.prototype.getWaterLevel = function() {
   return this.waterLevel;  
