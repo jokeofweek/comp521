@@ -75,7 +75,7 @@ Map.prototype.generate = function(octaves) {
 
 
 Map.prototype.setupWaterDistanceMap = function() {
-  var chunksAcross = 100;
+  var chunksAcross = 20;
   var chunkSize = size / chunksAcross;
 
   var chunkMap = new Uint8ClampedArray(chunksAcross * chunksAcross);
@@ -135,7 +135,7 @@ Map.prototype.setupWaterDistanceMap = function() {
           var yOffset = cY * chunkSize * size;
           for (var x = 0; x < chunkSize; x++) {
             for (var y = 0; y < chunkSize; y++) {
-              this.waterDistanceMap[xOffset + yOffset + x + y * size] = 255 - neighbor[0] * 10;
+              this.waterDistanceMap[xOffset + yOffset + x + y * size] = 255 - neighbor[0] * 30;
             }
           }
           break;
