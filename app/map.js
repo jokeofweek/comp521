@@ -113,6 +113,13 @@ Map.prototype.setupWaterDistanceMap = function() {
     for (var cY = 1; cY < chunksAcross - 1; cY++) {
       // If the point has water, exit early
       if (chunkMap[cY * chunksAcross + cX] == 0) {
+        var xOffset = cX * chunkSize;
+        var yOffset = cY * chunkSize * size;
+        for (var x = 0; x < chunkSize; x++) {
+          for (var y = 0; y < chunkSize; y++) {
+            this.waterDistanceMap[xOffset + yOffset + x + y * size] = 255;
+          }
+        }
         continue;
       }
 
@@ -128,7 +135,7 @@ Map.prototype.setupWaterDistanceMap = function() {
           var yOffset = cY * chunkSize * size;
           for (var x = 0; x < chunkSize; x++) {
             for (var y = 0; y < chunkSize; y++) {
-              this.waterDistanceMap[xOffset + yOffset + x + y * size] = neighbor[0] * 10;
+              this.waterDistanceMap[xOffset + yOffset + x + y * size] = 255 - neighbor[0] * 10;
             }
           }
           break;
