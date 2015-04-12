@@ -75,7 +75,7 @@ Map.prototype.generate = function(octaves) {
 
 
 Map.prototype.setupWaterDistanceMap = function() {
-  var chunksAcross = 25;
+  var chunksAcross = 50;
   var chunkSize = size / chunksAcross;
 
   var chunkMap = new Uint8ClampedArray(chunksAcross * chunksAcross);
@@ -87,12 +87,17 @@ Map.prototype.setupWaterDistanceMap = function() {
       var hasWater = false;
       var xOffset = cX * chunkSize;
       var yOffset = cY * chunkSize * size;
-
+      // We consider a chunk to having water if they have at least
+      // chunkSize water pixels.
+      var pixels = 0;
       for (var x = 0; x < chunkSize && !hasWater; x++) {
         for (var y = 0; y < chunkSize; y++) {
           if (this.heightMap[xOffset + yOffset + x + y * size] <= this.waterLevel) {
-            hasWater = true;
-            break;
+            pixels++;
+            if (pixels > chunkSize) {
+              hasWater = true;
+              break;
+            }
           }
         }
       }
