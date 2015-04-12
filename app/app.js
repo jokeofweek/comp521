@@ -9,17 +9,19 @@ console.log('seed: ' + seed);
 
 var map        = new Map(size);
 var eroder     = new Eroder(10, 2);
-var renderer3d = new Renderer3(document.getElementById('canvas3d'), size);
-var renderer2d = new Renderer2(document.getElementById('canvas2d'), size);
-var resourceRenderer = new ResourceRenderer(document.getElementById('canvasres'), size);
-var waterDistRenderer = new WaterDistanceRenderer(document.getElementById('canvaswd'), size);
+var renderers = [
+  new Renderer3(document.getElementById('canvas3d'), size),
+  new Renderer2(document.getElementById('canvas2d'), size),
+  new ResourceRenderer(document.getElementById('canvasres'), size),
+  new WaterDistanceRenderer(document.getElementById('canvaswd'), size),
+  new ViabilityRenderer(document.getElementById('canvasviab'), size),
+];
 
 // Generate map
 map.generate(octaves);
 eroder.erode(map);
 
 // Render
-renderer3d.render(map);
-renderer2d.render(map);
-resourceRenderer.render(map);
-waterDistRenderer.render(map);
+for (var i = 0; i < renderers.length; i++) {
+  renderers[i].render(map);
+}

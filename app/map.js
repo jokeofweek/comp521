@@ -109,8 +109,8 @@ Map.prototype.setupWaterDistanceMap = function() {
   // Perform a BFS on the chunks to figure out the distance for each chunk.
   var offsets = [-1, 1, -chunksAcross, chunksAcross, -chunksAcross - 1, -chunksAcross + 1, chunksAcross + 1, chunksAcross - 1];
 
-  for (var cX = 1; cX < chunksAcross - 1; cX++) {
-    for (var cY = 1; cY < chunksAcross - 1; cY++) {
+  for (var cX = 0; cX < chunksAcross; cX++) {
+    for (var cY = 0; cY < chunksAcross; cY++) {
       // If the point has water, exit early
       if (chunkMap[cY * chunksAcross + cX] == 0) {
         var xOffset = cX * chunkSize;
