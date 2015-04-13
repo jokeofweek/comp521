@@ -1,6 +1,8 @@
 function Evaluator(players, distThreshold) {
   this.players = players;
   this.distThreshold = distThreshold;
+
+  this.waterDistanceWeight = 0.5;
 };
 
 Evaluator.prototype.getViability = function(map, x, y) {
@@ -11,8 +13,11 @@ Evaluator.prototype.getViability = function(map, x, y) {
   if (height <= map.getWaterLevel() ) {
     return 0;
   }
-  return Math.min(255, Math.max(0, Math.round(
-    255 * ((resource / 255) * (waterDist / 255)))));
+
+
+  var score = (this.waterDistanceWeight * waterDist) + ((1 - this.waterDistanceWeight) * resource);
+
+  return Math.min(255, Math.max(0, Math.round(score)));
 };
 
 Evaluator.prototype.getPlayerPositions = function(map) {
