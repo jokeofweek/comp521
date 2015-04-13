@@ -10,6 +10,8 @@ function Map(size) {
 
   this.waterLevelThreshold = 0.3;
   this.waterLevel = null;
+
+  this.chunkDistanceCost = 15;
 }
 
 Map.prototype.set = function(x, y, z) {
@@ -135,7 +137,7 @@ Map.prototype.setupWaterDistanceMap = function() {
           var yOffset = cY * chunkSize * size;
           for (var x = 0; x < chunkSize; x++) {
             for (var y = 0; y < chunkSize; y++) {
-              this.waterDistanceMap[xOffset + yOffset + x + y * size] = 255 - neighbor[0] * 15;
+              this.waterDistanceMap[xOffset + yOffset + x + y * size] = 255 - neighbor[0] * this.chunkDistanceCost;
             }
           }
           break;
