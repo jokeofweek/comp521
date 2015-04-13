@@ -1,6 +1,8 @@
+// Global settings
+var size = 500;
+
 // Draw the noise values
 var octaves = 7;
-var size = 500;
 
 // Seed the RNG
 var seed = Math.round(1000 * Math.random());
@@ -9,7 +11,7 @@ console.log('seed: ' + seed);
 
 var map        = new Map(size);
 var eroder     = new Eroder(10, 2);
-var evaluator  = new Evaluator();
+var evaluator  = new Evaluator(6, 120);
 var renderers = [
   new Renderer3(document.getElementById('canvas3d'), size),
   new Renderer2(document.getElementById('canvas2d'), size),
