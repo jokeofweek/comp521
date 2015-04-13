@@ -11,7 +11,8 @@ function Map(size) {
   this.waterLevelThreshold = 0.3;
   this.waterLevel = null;
 
-  this.chunkDistanceCost = 15;
+  this.chunks = 100;
+  this.chunkDistanceCost = 10;
 }
 
 Map.prototype.set = function(x, y, z) {
@@ -77,7 +78,7 @@ Map.prototype.generate = function(octaves) {
 
 
 Map.prototype.setupWaterDistanceMap = function() {
-  var chunksAcross = 50;
+  var chunksAcross = this.chunks;
   var chunkSize = size / chunksAcross;
 
   var chunkMap = new Uint8ClampedArray(chunksAcross * chunksAcross);

@@ -6,6 +6,7 @@ var octaves = 7;
 
 // Seed the RNG
 var seed = Math.round(1000 * Math.random());
+seed = 507;
 noise.seed(seed);
 console.log('seed: ' + seed);
 
