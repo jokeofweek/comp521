@@ -10,7 +10,8 @@ function Renderer2(canvas, size, options) {
 }
 
 Renderer2.prototype.render = function(map) {
-  var image = this.ctx.createImageData(this.size, this.size);
+  var image = this.ctx.createImageData(this.size, this.size),
+      w     = map.getWaterLevel();
 
   for (var x = 0; x < this.size; x++) {
     for (var y = 0; y < this.size; y++) {
@@ -18,7 +19,7 @@ Renderer2.prototype.render = function(map) {
           z    = map.get(x * 2, y * 2),
           rgb  = [0,0,0];
 
-      if (z < map.getWaterLevel()) {
+      if (z < w) {
         rgb[2] = z + 180;
       } else {
         rgb[0] = z/2;
