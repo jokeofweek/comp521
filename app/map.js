@@ -171,7 +171,7 @@ Map.prototype.getWaterLevel = function() {
 Map.prototype.setPlayerPositions = function(positions) {
   this.playerPositions = positions;
 };
-Map.prototype.getPlayerPositions = function(positions) {
+Map.prototype.getPlayerPositions = function() {
   return this.playerPositions;
 };
 
