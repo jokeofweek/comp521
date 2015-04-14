@@ -2,6 +2,8 @@ function Evaluator(players, distThreshold, waterDistanceWeight) {
   this.players = players;
   this.distThreshold = distThreshold;
   this.waterDistanceWeight = waterDistanceWeight;
+
+  this.fairnessScore = null;
 };
 
 Evaluator.prototype.getViability = function(map, x, y) {
@@ -27,8 +29,8 @@ Evaluator.prototype.getPlayerPositions = function(map) {
   // given distance away from other players.
   for (var i = 0; i < this.players; i++) {
     var best = 0;
-    var bestX = 0;
-    var bestY = 0;
+    var bestX = -1;
+    var bestY = -1;
 
     for (var x = 0; x < size; x++) {
       for (var y = 0; y < size; y++) {
@@ -50,8 +52,17 @@ Evaluator.prototype.getPlayerPositions = function(map) {
       }
     }
 
+    // Not possible
+    if (bestX == -1) return [];
+
     placed.push([bestX, bestY]);
   }
 
+  this.fairnessScore = this.getViability(map, placed[0][0], placed[0][1]) - this.getViability(map, placed[players - 1][0], placed[players - 1][1]);
+
   return placed;
+};
+
+Evaluator.prototype.getFairnessScore = function() {
+  return this.fairnessScore;
 };

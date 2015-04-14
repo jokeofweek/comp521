@@ -13,6 +13,8 @@ function Map(size, chunks, chunkDistanceCost) {
 
   this.chunks = chunks;
   this.chunkDistanceCost = chunkDistanceCost;
+
+  this.playerPositions = [];
 }
 
 Map.prototype.set = function(x, y, z) {
@@ -165,6 +167,15 @@ Map.prototype.setupWaterDistanceMap = function() {
 Map.prototype.getWaterLevel = function() {
   return this.waterLevel;  
 };
+
+Map.prototype.setPlayerPositions = function(positions) {
+  this.playerPositions = positions;
+};
+Map.prototype.getPlayerPositions = function(positions) {
+  return this.playerPositions;
+};
+
+
 
 // Perlin noise at a point with N octaves from
 // https://github.com/Hypercubed/perlin-terrain-angular-demo/blob/bd6df90b055a555194dd4aa09cbe9776de2de7f0/script.js#L38-L51

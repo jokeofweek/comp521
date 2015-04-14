@@ -36,6 +36,12 @@ function regen() {
   map.generate(octaves);
   eroder.erode(map);
 
+  map.setPlayerPositions(evaluator.getPlayerPositions(map));
+
+  if (map.getPlayerPositions().length == 0) {
+    alert('Cannot place players fairly given configuration.');
+  }
+
   // Render
   for (var i = 0; i < renderers.length; i++) {
     renderers[i].render(map);

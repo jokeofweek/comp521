@@ -15,8 +15,7 @@ ViabilityRenderer.prototype.render = function(map) {
 
   // Calculate all the player positions. We'll draw a circle 
   // of a given radius around these on the map.
-  var positions = this.evaluator.getPlayerPositions(map);
-  console.log(positions);
+  var positions = map.getPlayerPositions();
 
   var distThreshold = Math.pow(10, 2);
 
