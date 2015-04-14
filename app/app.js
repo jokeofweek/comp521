@@ -12,6 +12,7 @@ function regen() {
   chunkDistCost = getValue('opt-chunk-dist-cost');
   distThresh = getValue('opt-dist-threshold');
   waterDistWeight = getValue('opt-water-weight');
+  samples = getValue('opt-samples');
 
   // Generate a seed if none was specified.
   if (isNaN(seed)) {
@@ -23,7 +24,7 @@ function regen() {
 
   var map        = new Map(size, chunks, chunkDistCost);
   var eroder     = new Eroder(eroderIter, eroderThresh);
-  var evaluator  = new Evaluator(players, distThresh, waterDistWeight);
+  var evaluator  = new Evaluator(players, distThresh, waterDistWeight, samples);
   var renderers = [
     new Renderer3(document.getElementById('canvas3d'), size),
     new Renderer2(document.getElementById('canvas2d'), size),
@@ -40,6 +41,11 @@ function regen() {
 
   if (map.getPlayerPositions().length == 0) {
     alert('Cannot place players fairly given configuration.');
+  } else {
+    var scores = map.getPlayerPositions().map(function(p) {
+      return evaluator.getViability(map, p[0], p[1]);
+    });
+    alert('Players placed with fairness score ' + evaluator.getFairnessScore() + '. Scores: ' + scores);
   }
 
   // Render
