@@ -1,4 +1,4 @@
-function Renderer3(canvas, size, options) {
+function Renderer3(canvas, size) {
   this.canvas = canvas;
   this.size   = size;
 }

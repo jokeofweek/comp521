@@ -1,9 +1,7 @@
-function Renderer2(canvas, size, options) {
+function Renderer2(canvas, size) {
   this.canvas = canvas;
   this.ctx    = canvas.getContext('2d');
   this.size   = size / 2;
-
-  options = options || {};
 
   this.canvas.height = size / 2;
   this.canvas.width  = size / 2;
