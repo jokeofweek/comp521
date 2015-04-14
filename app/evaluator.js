@@ -78,7 +78,6 @@ Evaluator.prototype.getPlayerPositions = function(map) {
       return self.getViability(map, p[0], p[1]);
     })
     w.sort();
-    console.log(w);
     var fairness = w[w.length - 1] - w[0];
     console.log('Fairness trial: ' + fairness)
     if (fairness < bestFairness) {
