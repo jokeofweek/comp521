@@ -37,7 +37,7 @@ ViabilityRenderer.prototype.render = function(map) {
       }
 
       if (!found) {
-        var v = evaluator.getViability(map, x * 2, y * 2);
+        var v = this.evaluator.getViability(map, x * 2, y * 2);
         image.data[i]     = v;
         image.data[i + 1] = v;
         image.data[i + 2] = v;

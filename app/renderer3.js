@@ -43,7 +43,7 @@ Renderer3.prototype.render = function(map) {
 
   scene.add(new THREE.AmbientLight(0xcccccc));
 
-  var controls = new THREE.TrackballControls(camera);
+  var controls = new THREE.TrackballControls(camera, this.canvas);
   var render = function() {
     window.requestAnimationFrame(render);
 

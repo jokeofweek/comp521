@@ -1,8 +1,7 @@
-function Evaluator(players, distThreshold) {
+function Evaluator(players, distThreshold, waterDistanceWeight) {
   this.players = players;
   this.distThreshold = distThreshold;
-
-  this.waterDistanceWeight = 0.5;
+  this.waterDistanceWeight = waterDistanceWeight;
 };
 
 Evaluator.prototype.getViability = function(map, x, y) {

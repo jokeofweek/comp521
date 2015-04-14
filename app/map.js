@@ -1,4 +1,4 @@
-function Map(size) {
+function Map(size, chunks, chunkDistanceCost) {
   this.size = size;
 
   this.heightMap  = new Uint8ClampedArray(size*size);
@@ -11,8 +11,8 @@ function Map(size) {
   this.waterLevelThreshold = 0.3;
   this.waterLevel = null;
 
-  this.chunks = 100;
-  this.chunkDistanceCost = 10;
+  this.chunks = chunks;
+  this.chunkDistanceCost = chunkDistanceCost;
 }
 
 Map.prototype.set = function(x, y, z) {
