@@ -8,6 +8,8 @@ Renderer3.prototype.render = function(map) {
       camera   = new THREE.PerspectiveCamera(45, 1, 1, 1000),
       renderer = new THREE.WebGLRenderer({canvas: this.canvas});
 
+  this.scene = scene;
+
   camera.position.set(100, 50, 100);
   camera.lookAt(new THREE.Vector3(0, 0, 0));
 
@@ -52,4 +54,25 @@ Renderer3.prototype.render = function(map) {
   }
 
   render();
+}
+
+Renderer3.prototype.placePlayers = function(map) {
+  if (this.scene === undefined) return;
+
+  var geometry = new THREE.BoxGeometry(4, 4, 4);
+  var material = new THREE.MeshPhongMaterial({color: 0xff0000});
+
+  var self = this;
+  map.getPlayerPositions().forEach(function(point) {
+    var x = point[0],
+        y = point[1],
+        z = 50 * map.get(y * self.size + x) / 255;
+
+    var mesh = new THREE.Mesh(geometry, material);
+    mesh.position.x = (x/self.size - 0.5) * 100;
+    mesh.position.y = z+2;
+    mesh.position.z = (y/self.size - 0.5) * 100;
+
+    self.scene.add(mesh);
+  });
 }

@@ -46,6 +46,9 @@ function regen() {
   for (var i = 0; i < renderers.length; i++) {
     renderers[i].render(map);
   }
+
+  // Place players on the 3d map
+  renderers[0].placePlayers(map);
 }
 
 function getValue(field) {
